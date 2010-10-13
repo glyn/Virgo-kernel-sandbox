@@ -16,6 +16,8 @@
 		<pathelement location="../org.eclipse.virgo.kernel.deployer.dm"/>
 		<pathelement location="../org.eclipse.virgo.kernel.model"/>
 		<pathelement location="../org.eclipse.virgo.kernel.shell"/>
+		<pathelement location="../org.eclipse.virgo.kernel.frameworkdetection.javaagent"/>
+		<pathelement location="../org.eclipse.virgo.kernel.frameworkdetection.lib"/>
 		<pathelement location="../org.eclipse.virgo.kernel.osgicommand"/>
 		<pathelement location="../org.eclipse.virgo.kernel.stubs"/>
 	</path>

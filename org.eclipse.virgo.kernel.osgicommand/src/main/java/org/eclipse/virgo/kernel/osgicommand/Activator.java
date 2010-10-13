@@ -120,6 +120,9 @@ public class Activator implements BundleActivator {
                 return; // TODO: report this failure -- but where?
 
             this.registrationTracker.track(context.registerService(CommandProvider.class.getName(), new OsgiKernelShellCommand(commandExecutor), null));
+			CommandProvider service = new FrameworkInfoCommand(context);
+			// register the framework detection service
+			context.registerService(CommandProvider.class.getName(), service, null);
         }
     }
 }
