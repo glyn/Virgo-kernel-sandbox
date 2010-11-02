@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="org.eclipse.virgo.kernel.frameworkdetection.lib">
+
+	<property file="${basedir}/../build.properties"/>
+	<property file="${basedir}/../build.versions"/>
+	<import file="${basedir}/../virgo-build/standard/default.xml"/>
+
+	<copy todir="${basedir}/../org.eclipse.virgo.kernel.test/src/test/resources/frameworkdetection" failonerror="false">
+		<fileset dir="${basedir}/target/artifacts">
+			<exclude name="*-sources.jar"/>
+			<exclude name="**/*.xml"/>
+		</fileset>
+	</copy>
+
+</project>

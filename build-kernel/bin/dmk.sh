@@ -50,6 +50,9 @@ then
 	
 	DEBUG_FLAG=
 	DEBUG_PORT=8000
+	FRK_FLAG=
+	FRK_OPTS=
+
 	SUSPEND=n
 	if [ -z "$JMX_PORT" ]
 	then
@@ -99,6 +102,9 @@ then
 		-shell)
 				SHELL_FLAG=1
 				;;
+		-frk)
+				FRK_FLAG=1
+				;;
 		*)
 				ADDITIONAL_ARGS="$ADDITIONAL_ARGS $1"
 				;;
@@ -132,7 +138,13 @@ then
 		LAUNCH_OPTS="$LAUNCH_OPTS -Fosgi.clean=true"
 	fi
 	
-	if [ "$SHELL_FLAG" ]
+	if [ "$FRK_FLAG" ]
+	then
+		FRK_OPTS=" \
+			-javaagent:$KERNEL_HOME/lib/kernel/org.eclipse.virgo.kernel.frameworkdetection.javaagent.jar"
+	fi
+	
+	if [ "$DEBUG_FLAG" ]
 	then
 	    echo "Warning: Kernel shell not supported; -shell option ignored."
 		# LAUNCH_OPTS="$LAUNCH_OPTS -Forg.eclipse.virgo.kernel.shell.local=true"
@@ -162,6 +174,7 @@ then
 	cd $KERNEL_HOME; $JAVA_HOME/bin/java \
 		$JAVA_OPTS \
 		$DEBUG_OPTS \
+		$FRK_OPTS \
 		$JMX_OPTS \
 		-XX:+HeapDumpOnOutOfMemoryError \
 		-XX:ErrorFile=$KERNEL_HOME/serviceability/error.log \

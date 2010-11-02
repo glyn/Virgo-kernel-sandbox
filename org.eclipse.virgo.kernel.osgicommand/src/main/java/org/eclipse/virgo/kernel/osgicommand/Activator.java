@@ -16,9 +16,10 @@ package org.eclipse.virgo.kernel.osgicommand;
 import org.eclipse.osgi.framework.console.CommandProvider;
 import org.eclipse.virgo.kernel.osgi.framework.OsgiFrameworkUtils;
 import org.eclipse.virgo.kernel.osgi.framework.OsgiServiceHolder;
+import org.eclipse.virgo.kernel.osgicommand.frameworkdetection.FrameworkInfoCommand;
 import org.eclipse.virgo.kernel.osgicommand.internal.OsgiKernelShellCommand;
-import org.eclipse.virgo.kernel.shell.CommandExecutor;
 import org.eclipse.virgo.kernel.osgicommand.internal.commands.classloading.ClassLoadingCommandProvider;
+import org.eclipse.virgo.kernel.shell.CommandExecutor;
 import org.eclipse.virgo.util.osgi.ServiceRegistrationTracker;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -120,6 +121,9 @@ public class Activator implements BundleActivator {
                 return; // TODO: report this failure -- but where?
 
             this.registrationTracker.track(context.registerService(CommandProvider.class.getName(), new OsgiKernelShellCommand(commandExecutor), null));
+			CommandProvider service = new FrameworkInfoCommand(context);
+			// register the framework detection service
+			context.registerService(CommandProvider.class.getName(), service, null);
         }
     }
 }

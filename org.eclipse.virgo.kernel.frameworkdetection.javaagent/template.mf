@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Premain-Class: org.eclipse.virgo.kernel.frameworkdetection.javaagent.FDAgent
+Boot-Class-Path: javassist.jar org.eclipse.virgo.kernel.frameworkdetection.lib.jar
+Bundle-Name: FrameworkDetectionAgent
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: FrameworkDetectionAgent
+Bundle-Version: 2.2.0
+Import-Template:
+ javassist.*;version="0"
+Excluded-Imports:
+ javassist.*,
+ org.eclipse.virgo.kernel.frameworkdetection.javaagent.*
