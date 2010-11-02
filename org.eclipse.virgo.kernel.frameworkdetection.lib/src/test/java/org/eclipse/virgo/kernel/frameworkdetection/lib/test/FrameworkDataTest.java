@@ -2,7 +2,6 @@ package org.eclipse.virgo.kernel.frameworkdetection.lib.test;
 
 import junit.framework.Assert;
 import org.eclipse.virgo.kernel.frameworkdetection.lib.FrameworkData;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -100,10 +99,10 @@ public class FrameworkDataTest {
 		frkData = new FrameworkData(FRAMEWORK_STATE_01,
 				FRAMEWORK_BUNDLE_01, DATE_01, ORIGIN, BUNDLE_IDS[0]);
 		StubFrameworkData frkTestData = new StubFrameworkData();
-		Assert.assertNotNull(frkData.toString("-showstack"));
-		Assert.assertNotNull(frkTestData.toString("-showstack"));
-		Assert.assertEquals(frkTestData.toString("-showstack"),
-				frkData.toString("-showstack"));
+		Assert.assertNotNull(frkData.toString(true));
+		Assert.assertNotNull(frkTestData.toString(true));
+		Assert.assertEquals(frkTestData.toString(true),
+				frkData.toString(true));
 	}
 	@After
 	public void cleanUp(){
@@ -132,7 +131,7 @@ public class FrameworkDataTest {
 			return result;
 		}
 
-		public String toString(String arg) {
+		public String toString(boolean arg) {
 			String result = "\nOSGi framework with state ["
 					+ FRAMEWORK_STATE_01 + "] and ID[" + BUNDLE_IDS[0] + "]\n"
 					+ "- system bundle classname: ["
@@ -140,7 +139,7 @@ public class FrameworkDataTest {
 					+ "- last changed on [" + DATE_01 + "]\n"
 					+ "- ownLoader: ["
 					+ FRAMEWORK_BUNDLE_01.getClass().getClassLoader() + "]\n";
-			if (arg != null && arg.equals("-showstack")) {
+			if (arg) {
 				result += "Call stack:\n";
 				for (StackTraceElement el : ORIGIN) {
 					result += el.toString() + "\n";

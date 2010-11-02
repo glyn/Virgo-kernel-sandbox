@@ -32,8 +32,8 @@
 		<exclude org="org.jboss.vfs"/>
 		<exclude org="org.apache.commons" module="com.springsource.org.apache.commons.logging"/>
 		<exclude org="org.springframework" module="org.springframework.context.support"/>
-		<exclude org="org.eclipse.virgo.kernel" module="org.eclipse.virgo.kernel.frameworkdetection.lib"/>
 		<exclude org="org.eclipse.virgo.kernel" module="org.eclipse.virgo.kernel.frameworkdetection.javaagent"/>
+		<exclude org="org.eclipse.virgo.kernel" module="org.eclipse.virgo.kernel.frameworkdetection.lib"/>
 				
 		<override org="org.eclipse.virgo.util" rev="${org.eclipse.virgo.util}"/>
 		<override org="org.eclipse.virgo.medic" rev="${org.eclipse.virgo.medic}"/>

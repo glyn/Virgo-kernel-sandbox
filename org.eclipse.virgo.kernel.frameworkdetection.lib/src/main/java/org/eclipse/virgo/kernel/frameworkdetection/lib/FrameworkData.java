@@ -1,9 +1,21 @@
+/*
+ * This file is part of the Virgo Web Server.
+ *
+ * Copyright (c) 2010 Eclipse Foundation.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Borislav Kapukaranov, SAP AG - initial contribution
+ */
+
 package org.eclipse.virgo.kernel.frameworkdetection.lib;
 
 /**
  * All needed for analysis data for a framework is gathered in FrameworkData objects - this is the normal way to store and access it.
  * @author Borislav Kapukaranov (borislav.kapukaranov@sap.com)
- * @version 1.0
  */
 
 public class FrameworkData {
@@ -16,10 +28,10 @@ public class FrameworkData {
   /**
    * Constructor for the storing framework data type.
    * @param frameworkState - the state in which the framework is, represented by the actual framework event
-   * @param symbolicName - the symbolic name of the framework's system bundle
-   * @param state - the state of the framework's system bundle
+   * @param frkBundle - the framework's system bundle
    * @param date - the date of the last modification to the framework's system bundle
    * @param origin - the stack trace of the call that performed the last changes to the framework's system bundle
+   * @param id - the id with which the framework is saved internally
    */
   public FrameworkData(String frameworkState, Object frkBundle, String date, StackTraceElement[] origin, long id) {
     this.frameworkState = frameworkState;
@@ -78,12 +90,12 @@ public class FrameworkData {
     return result;
   }
   
-  public String toString(String arg) { 
+  public String toString(boolean arg) { 
     String result = "\nOSGi framework with state [" + frameworkState + "] and ID[" + id + "]\n" +
         "- system bundle classname: [" + bundle.getClass().getName() + "]\n" +
         "- last changed on [" + date + "]\n" +
         "- ownLoader: [" + bundle.getClass().getClassLoader() + "]\n";
-    if (arg != null && arg.equals("-showstack")) {
+    if (arg) {
       result += "Call stack:\n";
       for (StackTraceElement el : origin) {
         result += el.toString() + "\n";

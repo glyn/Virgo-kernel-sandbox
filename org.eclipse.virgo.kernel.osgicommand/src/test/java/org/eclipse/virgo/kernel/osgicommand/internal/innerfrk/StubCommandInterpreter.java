@@ -60,7 +60,8 @@ public class StubCommandInterpreter implements CommandInterpreter {
     }
 
     public void printStackTrace(Throwable t) {
-        commandOutput.append(t.getStackTrace());
+        commandOutput.append(t.getClass() + ": " + t.getMessage() + "\n" + 
+                t.getStackTrace());
     }
 
     public void printDictionary(Dictionary dic, String title) {

@@ -14,7 +14,7 @@
     </publications>
 
 	<dependencies>
-		<dependency name='com.springsource.javassist' rev="latest.integration" org='org.jboss.javassist' conf='compile->runtime'/>
+		<dependency org="org.jboss.javassist" name="com.springsource.javassist" rev="3.10.0.GA" conf='compile->runtime'/>
 	</dependencies>
 
 </ivy-module>
