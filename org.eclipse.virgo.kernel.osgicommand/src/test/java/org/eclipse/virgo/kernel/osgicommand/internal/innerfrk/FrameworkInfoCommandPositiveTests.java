@@ -337,8 +337,8 @@ public class FrameworkInfoCommandPositiveTests {
         replay(bundle, bundleContext);
         cmd._frk(cmdInterpreter);
         StringBuffer commandResult = cmdInterpreter.getCommandOutput();
-        Assert.assertTrue(commandResult.toString().contains("org.osgi.framework.bootdelegation = property_1" + NEW_LINE +
-                "osgi.parentClassloader = property_2"));
+        Assert.assertTrue(commandResult.toString().contains("org.osgi.framework.bootdelegation = property_1"));
+        Assert.assertTrue(commandResult.toString().contains("osgi.parentClassloader = property_2"));
         verify(bundle, bundleContext);
     }
 
