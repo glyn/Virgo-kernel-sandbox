@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="build-kernel" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="build-kernel" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:maven="antlib:org.apache.maven.artifact.ant">
 
 	<path id="unit.test.bundles">
 		<pathelement location="../org.eclipse.virgo.kernel.shutdown"/>
@@ -16,6 +16,8 @@
 		<pathelement location="../org.eclipse.virgo.kernel.deployer.dm"/>
 		<pathelement location="../org.eclipse.virgo.kernel.model"/>
 		<pathelement location="../org.eclipse.virgo.kernel.shell"/>
+		<pathelement location="../org.eclipse.virgo.kernel.frameworkdetection.javaagent"/>
+		<pathelement location="../org.eclipse.virgo.kernel.frameworkdetection.lib"/>
 		<pathelement location="../org.eclipse.virgo.kernel.osgicommand"/>
 		<pathelement location="../org.eclipse.virgo.kernel.stubs"/>
 	</path>
@@ -35,10 +37,30 @@
 	<target name="precommit" depends="clean, clean-integration, test, findbugs, package, smoke-test"
 		description="Performs a CI server-like build, should be run prior to performing a Git push"/>
 
-	<target name="package" depends="ivy.init">
+	<target name="maven.init" depends="ivy.init">
+         <ivy:cachepath resolveId="maven.ant.tasks.classpath" pathid="maven.ant.tasks.classpath"
+              organisation="org.apache.maven" module="com.springsource.org.apache.maven.ant"
+              revision="${org.apache.maven.ant.version}" conf="runtime" type="jar" inline="true" log="download-only"/>
+         <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant"
+              classpathref="maven.ant.tasks.classpath"/>
+         <maven:install-provider groupId="org.springframework.build.aws" artifactId="org.springframework.build.aws.maven"
+              version="${org.springframework.build.aws.maven.version}"/>
+    	</target>
+	<target name="package" depends="maven.init">		
 		<delete dir="${package.output.dir}" quiet="true"/>
 		<mkdir dir="${package.output.dir}"/>
 
+	<!-- Download some dependencies from Maven Central. -->
+           <maven:dependencies filesetId="maven.fileset" versionsId="maven.versions">
+               <dependency groupId="javassist" artifactId="javassist" version="3.8.0.GA" type="jar" scope="compile" />
+               <remoteRepository id="maven.central" url="http://repo1.maven.org/maven2" />
+           </maven:dependencies>
+
+           <!-- Copy the downloaded files and strip out the versions from the file names. -->
+           <copy todir="${package.output.dir}/lib/kernel">
+               <fileset refid="maven.fileset" />
+               <mapper classpathref="maven.ant.tasks.classpath" classname="org.apache.maven.artifact.ant.VersionMapper" from="${maven.versions}" to="flatten" />
+           </copy>
 		<ivy:resolve resolveId="copy.path" file="${basedir}/lib-ivy.xml" transitive="true"/>
 		<ivy:retrieve resolveId="copy.path" pattern="${package.output.dir}/lib/[artifact]-[revision].[ext]" conf="lib" type="jar"/>
 
@@ -47,6 +69,18 @@
 		
 		<ivy:resolve resolveId="copy.path" file="${basedir}/kernel-ivy.xml" transitive="true"/>
 		<ivy:retrieve resolveId="copy.path" pattern="${package.output.dir}/repository/ext/[artifact]-[revision].[ext]" conf="repository-ext" type="jar"/>
+
+		<copy todir="${package.output.dir}/lib/kernel" failonerror="false">
+			<fileset dir="${basedir}/../org.eclipse.virgo.kernel.frameworkdetection.lib/target/artifacts">
+				<include name="org.eclipse.virgo.kernel.frameworkdetection.lib.jar"/>
+			</fileset>
+		</copy>
+
+		<copy todir="${package.output.dir}/lib/kernel" failonerror="false">
+			<fileset dir="${basedir}/../org.eclipse.virgo.kernel.frameworkdetection.javaagent/target/artifacts">
+				<include name="org.eclipse.virgo.kernel.frameworkdetection.javaagent.jar"/>
+			</fileset>
+		</copy>
 
 		<mkdir dir="${package.output.dir}/config"/>
 		<mkdir dir="${package.output.dir}/work"/>

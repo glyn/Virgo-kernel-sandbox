@@ -60,6 +60,8 @@ rem ------------------------------
     set CLEAN_FLAG=
     set DEBUG_FLAG=
     set DEBUG_PORT=8000
+    set FRK_FLAG=
+    set FRK_OPTS=
     set SUSPEND=n
     if not defined JMX_PORT set JMX_PORT=9875
     if not defined KEYSTORE_PASSWORD set KEYSTORE_PASSWORD=changeit
@@ -77,6 +79,7 @@ rem ------------------------------
   if "%~1"=="-keystorePassword"  goto keystorePassword
   if "%~1"=="-suspend"           goto suspend
   if "%~1"=="-shell"             goto shell
+  if "%~1"=="-frk"               goto frk
 
   set ADDITIONAL_ARGS=%ADDITIONAL_ARGS% "%~1"
 
@@ -120,7 +123,10 @@ rem ------------------------------
   :shell
     set SHELL_FLAG=1
     goto continueStartOptionLoop
-
+  :frk
+    set FRK_FLAG=1
+    shift
+    goto continueStartOptionLoop
   :endStartOptionLoop
 
   
@@ -130,6 +136,7 @@ rem ------------------------------
   rem Adjust options now all are known
     if "%KEYSTORE_PATH%"=="" set KEYSTORE_PATH=%CONFIG_DIR%\keystore
     if not "%DEBUG_FLAG%"=="" set DEBUG_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,address=%DEBUG_PORT%,server=y,suspend=%SUSPEND%
+    if not "%FRK_FLAG%"=="" set FRK_OPTS=-javaagent:%KERNEL_HOME%\lib\kernel\org.eclipse.virgo.kernel.frameworkdetection.javaagent.jar
 
   rem do Clean work:
     if not "%CLEAN_FLAG%"=="" (
@@ -163,6 +170,7 @@ rem ------------------------------
     rem Marshall parameters
     set KERNEL_JAVA_PARMS=%JAVA_OPTS% %DEBUG_OPTS% %JMX_OPTS%
 
+    set KERNEL_JAVA_PARMS=%KERNEL_JAVA_PARMS% %FRK_OPTS%
     set KERNEL_JAVA_PARMS=%KERNEL_JAVA_PARMS% -XX:+HeapDumpOnOutOfMemoryError 
     set KERNEL_JAVA_PARMS=%KERNEL_JAVA_PARMS% -XX:ErrorFile="%KERNEL_HOME%\serviceability\error.log" 
     set KERNEL_JAVA_PARMS=%KERNEL_JAVA_PARMS% -XX:HeapDumpPath="%KERNEL_HOME%\serviceability\heap_dump.hprof"

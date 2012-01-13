@@ -188,6 +188,7 @@ org.osgi.framework.system.packages = \
  org.xml.sax.ext,\
  org.xml.sax.helpers
 org.osgi.framework.bootdelegation = \
+ org.eclipse.virgo.kernel.frameworkdetection.lib,\
  org.eclipse.virgo.osgi.extensions.*,\
  org.eclipse.virgo.osgi.launcher.*,\
  org.eclipse.virgo.kernel.authentication,\
